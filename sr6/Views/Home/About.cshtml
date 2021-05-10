@@ -1,0 +1,111 @@
+﻿@{
+    ViewBag.Title = "Статистика";
+}
+@model sr6.Models.StatViewModel
+    @using (Html.BeginForm("About", "Home", FormMethod.Get))
+    { 
+<select name="project">
+    @foreach (var item in Model.projects)
+    {
+        if (item.id == Model.selectProject.id)
+        {
+            <option selected>
+                @item.title
+            </option>
+        }
+        else
+        {
+            <option>
+                @item.title
+            </option>
+        }
+    }
+</select>
+<input type="submit" value="Выбрать">
+}
+
+<div id="donut_single" style="width: 900px; height: 500px;"></div>
+<br>
+<div id="donut_single2" style="width: 900px; height: 500px;"></div>
+<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+
+<script type="text/javascript">
+
+        google.load("visualization", "1", { packages: ["corechart"] });
+
+        google.setOnLoadCallback(drawChart);
+
+        function drawChart() {
+
+            var data = google.visualization.arrayToDataTable([
+
+                ['Тесты', 'Число тестов - '+@Model.countOfTests],
+
+                ['Успешные', @Model.countWithSuccessCompleet],
+
+                ['Не успешные', @Model.countWithUnSuccessCompleet],
+
+            ]);
+
+            var options = {
+
+                title: 'Число тестов - '+@Model.countOfTests,
+
+                pieHole: 0.5,
+
+                pieSliceTextStyle: {
+
+                    color: 'black',
+
+                },
+
+                legend: 'none'
+
+            };
+
+            var chart = new google.visualization.PieChart(document.getElementById('donut_single'));
+
+            chart.draw(data, options);
+
+        }    </script>
+<script type="text/javascript">
+
+        google.load("visualization", "1", { packages: ["corechart"] });
+
+        google.setOnLoadCallback(drawChart);
+
+        function drawChart() {
+
+            var data = google.visualization.arrayToDataTable([
+                  ['Ошибки', ''],
+
+
+                ['Исправленные', @Model.countOfFixedErreros],
+
+                ['Ожидающие исправлений', @Model.countOfWaitingToFix]
+
+            ]);
+
+            var options = {
+
+                title: 'Ошибки',
+
+                pieHole: 0.5,
+
+                pieSliceTextStyle: {
+
+                    color: 'black',
+
+                },
+
+                legend: 'none'
+
+            };
+
+            var chart = new google.visualization.PieChart(document.getElementById('donut_single2'));
+
+            chart.draw(data, options);
+
+    }
+</script>
+

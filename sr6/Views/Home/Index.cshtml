@@ -1,0 +1,16 @@
+﻿@{
+    ViewBag.Title = "Проекты";
+}
+
+@model List<sr6.Models.Project>
+<table style="width:100%" class="table table-striped">
+    @foreach (var item in Model)
+    {
+    <tr style="width:100%">
+        <td style="width:100%"><a href="/Scenarios/ScenariosList/?project=@item.title">@item.title</a></td>
+        <td><a href="/Home/CreateReport/?id=@item.id">Excel отчёт</a></td>
+        <td><a href="/Home/DeleteProject/?id=@item.id">Удалить</a></td>
+    </tr>
+    }
+</table>
+@Html.ActionLink("Добавить", "AddProject")

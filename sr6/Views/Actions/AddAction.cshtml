@@ -1,0 +1,42 @@
+﻿@model sr6.Models.Action
+
+@{
+    ViewBag.Title = "Добавление действия";
+}
+
+<h2>Добавить действие</h2>
+
+@using (Html.BeginForm("AddAction","Actions",FormMethod.Post)) 
+{
+    @Html.AntiForgeryToken()
+    
+    <div class="form-horizontal">
+        <h4>Действие</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.LabelFor(model => model.number, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <input type="text" name="number" value="@Model.number">
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.action, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <input type="text" name="action" value="@Model.action">
+            </div>
+        </div>
+             <input type="hidden" name="Scenarioid" value="@Model.Scenarioid">
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Добавить" class="btn btn-default" />
+            </div>
+        </div>
+}
+
+<div>
+    <a href="/Actions/ActionList/?id=@Model.Scenarioid">Назад</a>
+</div>

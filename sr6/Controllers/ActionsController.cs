@@ -1,0 +1,76 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.Mvc;
+using sr6.Models;
+using System.Data.Entity;
+
+namespace sr6.Controllers
+{
+    public class ActionsController : Controller
+    {
+        DBContext context = new DBContext();
+        public ActionResult ActionList(int? id)
+        {
+            if (id == null) { return RedirectToAction("Index", "Home"); }
+            ActionListViewModel ALWM = new ActionListViewModel();
+            ALWM.Actions = context.Actions.Include(a => a.scenario).Where(a => a.Scenarioid == id).OrderBy(a => a.number).ToList();
+            ALWM.id = Convert.ToInt32(id);
+
+            return View(ALWM);
+        }
+        [HttpGet]
+        public ActionResult AddAction(int? id)
+        {
+            if (id == null) { return RedirectToAction("Index", "Home"); }
+            Models.Action act = new Models.Action();
+            act.number = 1;
+            if (context.Actions.Where(a => a.Scenarioid == id).Count() > 0)
+                act.number = (context.Actions.Where(a => a.Scenarioid == id).OrderByDescending(a => a.number).First().number) + 1;
+            act.Scenarioid = Convert.ToInt32(id);
+            return View(act);
+        }
+        [HttpPost]
+        public ActionResult AddAction(string number, string action, int Scenarioid)
+        {
+            Models.Action act = new Models.Action();
+            int numberToAct = 0;
+            act.Scenarioid = Scenarioid;
+            act.action = action;
+            if (Int32.TryParse(number, out numberToAct)) { act.number = numberToAct; } else { return View(act); }
+            if (String.IsNullOrEmpty(action)) { return View(act); }
+            context.Actions.Add(act);
+            context.SaveChanges();
+            return RedirectToAction("ActionList", "Actions", new { id = Scenarioid });
+        }
+        public ActionResult DeleteAction(int? ActId, int? id)
+        {
+            if (ActId == null || id == null) { return RedirectToAction("Index", "Home"); }
+            Models.Action act = context.Actions.Where(a => a.id == ActId).FirstOrDefault();
+            context.Actions.Remove(act);
+            context.SaveChanges();
+            return RedirectToAction("ActionList", "Actions", new { id = id });
+
+        }
+        [HttpGet]
+        public ActionResult ChangeAction(int? ActId, int? id)
+        {
+            if (ActId == null || id == null) { return RedirectToAction("Index", "Home"); }
+            Models.Action act = context.Actions.Where(a => a.id == (int)ActId).FirstOrDefault();
+            return View(act);
+        }
+        [HttpPost]
+        public ActionResult ChangeAction(string number, string action, int Scenarioid, int actId)
+        {
+            Models.Action act = context.Actions.Where(a => a.id == (int)actId).FirstOrDefault() ;
+            int numberToAct = 0;
+            act.Scenarioid = Scenarioid;
+            act.action = action;
+            if (Int32.TryParse(number, out numberToAct)) { act.number = numberToAct; } else { return View(act); }
+            if (String.IsNullOrEmpty(action)) { return View(act); }
+            context.SaveChanges();
+            return RedirectToAction("ActionList", "Actions", new { id = Scenarioid });
+        }
+    }
+}

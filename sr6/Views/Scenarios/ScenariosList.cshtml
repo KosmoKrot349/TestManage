@@ -1,0 +1,79 @@
+﻿@{
+    ViewBag.Title = "Список сценариев";
+}
+@model sr6.Models.ScenariosListViewModel
+    @{ int i = 0; }
+
+<table class="table table-striped">
+    <tr>
+        <td>
+            Id
+        </td>
+        <td>
+            Название
+        </td>
+        <td>
+            Результат выполнения
+        </td>
+        <td>
+            Дата проведения теста
+        </td>
+        <td>
+            Степень влияния ошибки на код
+        </td>
+        <td>
+            Крайняя дата исправления ошибки
+        </td>
+        <td>
+            Исправлен
+            </td>
+        <td>
+            ФИО фиксера
+        </td>
+        <td>Дейсвтия</td>
+        <td>Удалть/Изменить</td>
+    </tr>
+    @foreach (var item in Model.Scenarios)
+    {
+<tr>
+    <td>
+        @i
+    </td>
+    <td>
+        @item.title
+    </td>
+    <td>
+        @item.result
+    </td>
+    <td>
+        @item.dateOfExecution
+    </td>
+    <td>
+        @item.typeOfError
+    </td>
+    <td>
+        @item.dateOfBugFix
+    </td>
+    <td>
+        @if (item.isFixed == false)
+        {
+            <a href="/Scenarios/FixBug/?id=@item.id&project=@Model.project">Не исправлен</a>
+        }
+        else
+        {<a href="/Scenarios/FixBug/?id=@item.id&project=@Model.project">Исправлен</a>}
+    </td>
+    <td>
+        @item.nameOfFixer
+    </td>
+    <td>
+        <a href="/Actions/ActionList/?id=@item.id">Действия</a>
+    </td>
+    <td>
+        <a href="/Scenarios/DeleteScenario/?id=@item.id&project=@Model.project">Удалить</a>/<a href="/Scenarios/ChangeScenario/?id=@item.id&project=@Model.project">Изменить</a>
+    </td>
+</tr>
+        i++;
+    }
+</table>
+<a href="/Scenarios/AddScenario/?project=@Model.project">Добавить сценарий</a>
+

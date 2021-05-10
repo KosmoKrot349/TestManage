@@ -1,0 +1,34 @@
+﻿@{
+    ViewBag.Title = "Список действий";
+}
+@model sr6.Models.ActionListViewModel
+
+<table class="table table-striped">
+    <tr>
+        <td>
+            №
+        </td>
+        <td>
+            Действие
+        </td>
+        <td>
+            Удалить/Изменить
+        </td>
+    </tr>
+    @foreach (var item in Model.Actions)
+    {
+        <tr>
+            <td>
+                @item.number
+            </td>
+            <td>
+                @item.action
+            </td>
+            <td>
+                <a href="/Actions/DeleteAction/?ActId=@item.id&id=@Model.id">Удалить</a>/ <a href="/Actions/ChangeAction/?ActId=@item.id&id=@Model.id">Изменить</a>
+            </td>
+        </tr>
+    }
+</table>
+<a href="/Actions/AddAction/?id=@Model.id">Добавить дейсвтие</a>
+

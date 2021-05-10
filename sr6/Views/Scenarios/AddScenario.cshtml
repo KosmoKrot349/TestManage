@@ -1,0 +1,77 @@
+﻿@model sr6.Models.Scenario
+
+@{
+    ViewBag.Title = "Добавление сценария";
+}
+
+<h2>Добавить сценарий</h2>
+
+@using (Html.BeginForm("AddScenario", "Scenarios", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+
+<div class="form-horizontal">
+    <h4>Сценарий</h4>
+    <hr />
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    <div class="form-group">
+        @Html.LabelFor(model => model.title, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            <input type="text" name="title" />
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(model => model.result, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            <input type="text" name="result" />
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.dateOfExecution, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            <input type="date" name="dateOfExecution" />
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.typeOfError, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            <select name="typeOfError">
+                <option>Летально</option>
+                <option>Средней тяжести</option>
+                <option>Не летально</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.dateOfBugFix, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            <input type="date" name="dateOfBugFix" />
+        </div>
+    </div>
+    
+    <div class="form-group">
+        @Html.LabelFor(model => model.nameOfFixer, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            <input type="text" name="nameOfFixer" />
+        </div>
+    </div>
+    <input type="hidden" name="ProjectId" value="@Model.Projectid">
+    <div class="form-group">
+    </div>
+</div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Создать" class="btn btn-default" />
+            </div>
+        </div>
+}
+
+<div>
+    @{ 
+        string project= new sr6.Models.DBContext().Projects.Where(s => s.id == Model.Projectid).FirstOrDefault().title;
+    }
+   <a href="/Scenarios/ScenariosList/?project=@project">Назад</a>
+</div>
