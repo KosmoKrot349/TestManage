@@ -17,20 +17,26 @@
     <div class="form-group">
         @Html.LabelFor(model => model.title, htmlAttributes: new { @class = "control-label col-md-2" })
         <div class="col-md-10">
-            <input type="text" name="title" />
+            <input type="text" name="title" value="@Model.title" />
+            @Html.ValidationMessageFor(model => model.title, "", new { @class = "text-danger" })
         </div>
     </div>
     <div class="form-group">
         @Html.LabelFor(model => model.result, htmlAttributes: new { @class = "control-label col-md-2" })
         <div class="col-md-10">
-            <input type="text" name="result" />
+            <input type="text" name="result" value="@Model.result" />
+            @Html.ValidationMessageFor(model => model.result, "", new { @class = "text-danger" })
         </div>
     </div>
 
     <div class="form-group">
         @Html.LabelFor(model => model.dateOfExecution, htmlAttributes: new { @class = "control-label col-md-2" })
         <div class="col-md-10">
-            <input type="date" name="dateOfExecution" />
+            @{
+                string str = Model.dateOfExecution.ToShortDateString().Split('.')[2] + "-" + Model.dateOfExecution.ToShortDateString().Split('.')[1] + "-" + Model.dateOfExecution.ToShortDateString().Split('.')[0];
+            }
+            <input type="date" name="dateOfExecution" value="@str" />
+            @Html.ValidationMessageFor(model => model.dateOfExecution, "", new { @class = "text-danger" })
         </div>
     </div>
 
@@ -38,9 +44,9 @@
         @Html.LabelFor(model => model.typeOfError, htmlAttributes: new { @class = "control-label col-md-2" })
         <div class="col-md-10">
             <select name="typeOfError">
-                <option>Летально</option>
-                <option>Средней тяжести</option>
-                <option>Не летально</option>
+               @if (Model.typeOfError == "Летально"){<option selected>Летально</option>}else {<option>Летально</option> }
+                @if (Model.typeOfError == "Средней тяжести"){<option selected>Средней тяжести</option>}else {<option>Средней тяжести</option> }
+                 @if (Model.typeOfError == "Не летально"){<option selected>Не летально</option>}else {<option>Не летально</option> }
             </select>
         </div>
     </div>
@@ -48,14 +54,18 @@
     <div class="form-group">
         @Html.LabelFor(model => model.dateOfBugFix, htmlAttributes: new { @class = "control-label col-md-2" })
         <div class="col-md-10">
-            <input type="date" name="dateOfBugFix" />
+            @{
+                str = Model.dateOfBugFix.ToShortDateString().Split('.')[2] + "-" + Model.dateOfBugFix.ToShortDateString().Split('.')[1] + "-" + Model.dateOfBugFix.ToShortDateString().Split('.')[0];
+            }
+            <input type="date" name="dateOfBugFix" value="@str" />
+            @Html.ValidationMessageFor(model => model.dateOfBugFix, "", new { @class = "text-danger" })
         </div>
     </div>
     
     <div class="form-group">
         @Html.LabelFor(model => model.nameOfFixer, htmlAttributes: new { @class = "control-label col-md-2" })
         <div class="col-md-10">
-            <input type="text" name="nameOfFixer" />
+            <input type="text" name="nameOfFixer" value="@Model.nameOfFixer" />
         </div>
     </div>
     <input type="hidden" name="ProjectId" value="@Model.Projectid">

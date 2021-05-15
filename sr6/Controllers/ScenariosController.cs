@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using sr6.Models;
-using System.Data.Entity;
 
 namespace sr6.Controllers
 {
@@ -30,20 +30,17 @@ namespace sr6.Controllers
             return View(scenario);
         }
         [HttpPost]
-        public ActionResult AddScenario(string title,string result,DateTime? dateOfExecution,string typeOfError,DateTime? dateOfBugFix, string nameOfFixer, int? ProjectId)
+        public ActionResult AddScenario([Bind(Include = "title,result,dateOfExecution,dateOfBugFix,nameOfFixer,typeOfError,ProjectId")]Scenario scenario)
         {
-            Scenario scenario = new Scenario();
-            scenario.title = title;
-            scenario.result = result;
             scenario.isFixed = false;
-           scenario.dateOfExecution = Convert.ToDateTime(dateOfExecution);
-           scenario.typeOfError = typeOfError;
-            scenario.dateOfBugFix = Convert.ToDateTime(dateOfBugFix);
-            scenario.nameOfFixer = nameOfFixer;
-            scenario.Projectid = Convert.ToInt32(ProjectId);
-            context.Scenarios.Add(scenario);
-            context.SaveChanges();
-            return RedirectToAction("ScenariosList","Scenarios",new { project = context.Projects.Where(p => p.id == ProjectId).FirstOrDefault().title });
+            if (ModelState.IsValid)
+            {
+
+                context.Scenarios.Add(scenario);
+                context.SaveChanges();
+                return RedirectToAction("ScenariosList", "Scenarios", new { project = context.Projects.Where(p => p.id == scenario.Projectid).FirstOrDefault().title });
+            }
+            return View(scenario);
         }
         public ActionResult DeleteScenario(int id, string project) {
 
@@ -65,24 +62,21 @@ namespace sr6.Controllers
         public ActionResult ChangeScenario(int? id, string project)
         {
             if (id == null || String.IsNullOrEmpty(project)) { return RedirectToAction("Index", "Home"); }
-            Scenario sc = context.Scenarios.Where(s => s.id == id).FirstOrDefault();
-            return View(sc);
+            Scenario scenario = context.Scenarios.Where(s => s.id == id).FirstOrDefault();
+            return View(scenario);
         }
 
         [HttpPost]
-        public ActionResult ChangeScenario(string title, string result, DateTime? dateOfExecution, string typeOfError, DateTime? dateOfBugFix, string nameOfFixer, int? ProjectId,int id)
+        public ActionResult ChangeScenario([Bind(Include = "id,title,result,dateOfExecution,dateOfBugFix,nameOfFixer,typeOfError,ProjectId")] Scenario scenario)
         {
-            Scenario scenario = context.Scenarios.Where(s => s.id == id).FirstOrDefault();
-            scenario.title = title;
-            scenario.result = result;
-            scenario.isFixed = false;
-            scenario.dateOfExecution = Convert.ToDateTime(dateOfExecution);
-            scenario.typeOfError = typeOfError;
-            scenario.dateOfBugFix = Convert.ToDateTime(dateOfBugFix);
-            scenario.nameOfFixer = nameOfFixer;
-            scenario.Projectid = Convert.ToInt32(ProjectId);
-            context.SaveChanges();
-            return RedirectToAction("ScenariosList", "Scenarios", new { project = context.Projects.Where(p => p.id == ProjectId).FirstOrDefault().title });
+
+            if (ModelState.IsValid)
+            {
+                context.Entry(scenario).State = EntityState.Modified;
+                context.SaveChanges();
+                return RedirectToAction("ScenariosList", "Scenarios", new { project = context.Projects.Where(p => p.id == scenario.Projectid).FirstOrDefault().title });
+            }
+            return View(scenario);
         }
     }
 }

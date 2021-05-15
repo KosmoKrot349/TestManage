@@ -17,7 +17,8 @@
         <div class="form-group">
             @Html.LabelFor(model => model.number, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                <input type="text" name="number" value="@Model.number">
+                <input type="text" name="number" value="@Model.number" >
+                @Html.ValidationMessageFor(model => model.number, "", new { @class = "text-danger" })
             </div>
         </div>
 
@@ -25,6 +26,7 @@
             @Html.LabelFor(model => model.action, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 <input type="text" name="action" value="@Model.action">
+                @Html.ValidationMessageFor(model => model.action, "", new { @class = "text-danger" })
             </div>
         </div>
              <input type="hidden" name="Scenarioid" value="@Model.Scenarioid">

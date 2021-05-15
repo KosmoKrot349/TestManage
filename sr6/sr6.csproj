@@ -167,6 +167,10 @@
     <Compile Include="Migrations\202104091200583_migr31.designer.cs">
       <DependentUpon>202104091200583_migr31.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202105151049246_migr4.cs" />
+    <Compile Include="Migrations\202105151049246_migr4.designer.cs">
+      <DependentUpon>202105151049246_migr4.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Action.cs" />
     <Compile Include="Models\ActionListViewModel.cs" />
@@ -236,6 +240,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202104091200583_migr31.resx">
       <DependentUpon>202104091200583_migr31.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202105151049246_migr4.resx">
+      <DependentUpon>202105151049246_migr4.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

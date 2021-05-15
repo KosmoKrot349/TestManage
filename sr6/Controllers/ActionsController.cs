@@ -32,17 +32,16 @@ namespace sr6.Controllers
             return View(act);
         }
         [HttpPost]
-        public ActionResult AddAction(string number, string action, int Scenarioid)
+
+        public ActionResult AddAction([Bind(Include = "number,action,Scenarioid")] Models.Action act)
         {
-            Models.Action act = new Models.Action();
-            int numberToAct = 0;
-            act.Scenarioid = Scenarioid;
-            act.action = action;
-            if (Int32.TryParse(number, out numberToAct)) { act.number = numberToAct; } else { return View(act); }
-            if (String.IsNullOrEmpty(action)) { return View(act); }
-            context.Actions.Add(act);
-            context.SaveChanges();
-            return RedirectToAction("ActionList", "Actions", new { id = Scenarioid });
+            if (ModelState.IsValid)
+            {
+                context.Actions.Add(act);
+                context.SaveChanges();
+                return RedirectToAction("ActionList", "Actions", new { id = act.Scenarioid });
+            }
+            return View(act);
         }
         public ActionResult DeleteAction(int? ActId, int? id)
         {
@@ -61,16 +60,15 @@ namespace sr6.Controllers
             return View(act);
         }
         [HttpPost]
-        public ActionResult ChangeAction(string number, string action, int Scenarioid, int actId)
+        public ActionResult ChangeAction([Bind(Include = "number,action,Scenarioid")] Models.Action act,int Aid)
         {
-            Models.Action act = context.Actions.Where(a => a.id == (int)actId).FirstOrDefault() ;
-            int numberToAct = 0;
-            act.Scenarioid = Scenarioid;
-            act.action = action;
-            if (Int32.TryParse(number, out numberToAct)) { act.number = numberToAct; } else { return View(act); }
-            if (String.IsNullOrEmpty(action)) { return View(act); }
-            context.SaveChanges();
-            return RedirectToAction("ActionList", "Actions", new { id = Scenarioid });
+            act.id = Aid;
+            if (ModelState.IsValid)
+            {
+                context.Entry(act).State = EntityState.Modified;
+                context.SaveChanges();
+                return RedirectToAction("ActionList", "Actions", new { id = act.Scenarioid });
+            }return View(act);
         }
     }
 }
